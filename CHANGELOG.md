@@ -11,4 +11,4 @@ First standalone release candidate, extracted from the locally used snapshot and
 - Previewable provider skill installation that preserves existing skills and settings.
 - Offline example, fault tests, wheel-install smoke test and reproducible archives.
 
-Tested locally on macOS with Python 3.9 and 3.15. The operating-system CI matrix is configured and awaits its first remote run. Cloud-sync concurrency, perfect summaries, equal model reasoning and token-cost savings are not established by this candidate.
+All 51 tests and the installed-wheel smoke check pass in CI on Linux, macOS and Windows with Python 3.9 and 3.13. Local macOS checks also pass with Python 3.9 and 3.15. These checks exercise the CLI and provider data formats. Live provider sessions on every operating system, cloud-sync concurrency, perfect summaries, equal model reasoning and token-cost savings are not established by this candidate.

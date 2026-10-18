@@ -6,7 +6,7 @@ Threadhaven saves a small, checked task snapshot that Codex and Claude Code can 
 
 A second command reads context-window telemetry and discards readings from before compaction. Everything runs locally with Python's standard library. There are no model calls, API keys or runtime dependencies.
 
-This is the **0.1.0 release candidate**. The standalone package is being prepared for release. Python 3.9 and 3.15 have been tested on macOS. Linux and Windows checks are configured in CI but have not run remotely yet.
+This is the **0.1.0 release candidate**. All 51 tests and the installed-wheel smoke check pass in CI on Linux, macOS and Windows with Python 3.9 and 3.13. Python 3.9 and 3.15 also pass locally on macOS. The standalone package is being prepared for release.
 
 ## Install
 
