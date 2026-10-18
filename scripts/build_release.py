@@ -42,7 +42,7 @@ def build(output=None):
         for n,data in sorted(source.items()):
             zi=zipfile.ZipInfo(NAME+'/'+n,(2026,10,18,0,0,0));zi.compress_type=zipfile.ZIP_DEFLATED;zi.external_attr=0o644<<16;z.writestr(zi,data)
     tarpath=out/(NAME+'.tar.gz')
-    with tarpath.open('wb') as stream, gzip.GzipFile(fileobj=stream,mode='wb',filename='',mtime=0) as gz,tarfile.open(fileobj=gz,mode='w') as t:
+    with tarpath.open('wb') as stream, gzip.GzipFile(fileobj=stream,mode='wb',filename='',mtime=0,compresslevel=9) as gz,tarfile.open(fileobj=gz,mode='w') as t:
         for n,data in sorted(source.items()):
             ti=tarfile.TarInfo(NAME+'/'+n);ti.size=len(data);ti.mode=0o644;ti.mtime=0;t.addfile(ti,io.BytesIO(data))
     (out/'SHA256SUMS.txt').write_text(''.join(sha(p.read_bytes())+'  '+p.name+'\n' for p in [whl,archive,tarpath]))
