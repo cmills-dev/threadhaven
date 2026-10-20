@@ -7,7 +7,7 @@ description: Start or resume a task from its saved Threadhaven snapshot. Use at 
 
 Read the saved state first, then report it. Use the same project slug, task slug and store as the session that saved it.
 
-1. Choose PROJECT and TASK from the user's request, the handover file or `threadhaven snapshot history` (newest first). Ask the user when more than one task fits.
+1. Choose PROJECT and TASK from the user's request or the handover file. Ask the user when more than one task fits.
 2. Run `threadhaven snapshot read --project PROJECT --task TASK --repo REPOSITORY`. Note the Snapshot ID.
 3. Run `threadhaven snapshot check --project PROJECT --task TASK --repo REPOSITORY`. Read `integrity` and every `evidence` entry. Lines that start with CHANGED, MISSING_OR_UNREADABLE or UNVERIFIED_URL, and messages about the repository path or HEAD, mark stale or unproven items.
 4. Read the handover file when the repository has one. The default is `HANDOVER.md` in the repository root. Use the path the user names instead when they give one.

@@ -295,7 +295,7 @@ def template():
             'next_action': 'The next concrete step', 'evidence': [], 'external_actions': []}
 
 
-def main(argv=None):
+def build_parser():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--store', type=Path, default=DEFAULT_STORE)
     sub = parser.add_subparsers(dest='command', required=True)
@@ -315,7 +315,11 @@ def main(argv=None):
             p.add_argument('--input', type=Path, required=True)
         if name == 'due':
             p.add_argument('--minutes', type=int, default=30)
-    a = parser.parse_args(argv)
+    return parser
+
+
+def main(argv=None):
+    a = build_parser().parse_args(argv)
     try:
         if a.command == 'template':
             print(encoded(template()).decode(), end='')

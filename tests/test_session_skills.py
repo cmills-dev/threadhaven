@@ -4,11 +4,12 @@ import io
 import json
 from pathlib import Path
 import re
+import shlex
 import subprocess
 import sys
 import tempfile
 import unittest
-from threadhaven import cli
+from threadhaven import cli, snapshot
 
 SKILLS = Path(__file__).resolve().parents[1] / 'threadhaven' / 'skills'
 SESSION = ('initiate', 'checkpoint', 'close')
@@ -41,6 +42,22 @@ class SessionSkillTests(unittest.TestCase):
                 done = subprocess.run([sys.executable, '-m', 'threadhaven', 'snapshot', sub, '--help'],
                                       capture_output=True, text=True)
                 self.assertEqual(done.returncode, 0, sub)
+
+    def test_every_command_line_parses_with_the_real_parser(self):
+        samples = {'PROVIDER': 'claude', 'PROJECT': 'demo', 'TASK': 'parser', 'REPOSITORY': '.',
+                   'SESSION_ID': 's1', 'BASE_ID': 'none', 'DRAFT_JSON': 'draft.json', 'SAVED_ID': 'x'}
+        parser = snapshot.build_parser()
+        for name in SESSION:
+            text = (SKILLS / name / 'SKILL.md').read_text(encoding='utf-8')
+            lines = re.findall(r'`(threadhaven snapshot [^`]+)`', text)
+            self.assertTrue(lines, name)
+            for line in lines:
+                words = [samples.get(word, word) for word in shlex.split(line)[2:]]
+                try:
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        parser.parse_args(words)
+                except SystemExit:
+                    self.fail(name + ' has a command line the CLI rejects: ' + line)
 
     def test_skills_are_generic(self):
         for name in SESSION:
