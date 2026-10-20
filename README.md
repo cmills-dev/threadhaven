@@ -6,7 +6,7 @@ Threadhaven saves a small, checked task snapshot that Codex and Claude Code can 
 
 A second command reads context-window telemetry and discards readings from before compaction. Everything runs locally with Python's standard library. There are no model calls, API keys or runtime dependencies.
 
-This is the **0.1.0 release candidate**. All 51 tests and the installed-wheel smoke check pass in CI on Linux, macOS and Windows with Python 3.9 and 3.13. Python 3.9 and 3.15 also pass locally on macOS. The standalone package is being prepared for release.
+This is the **0.1.0 release candidate**. The 51 tests of the first candidate and the installed-wheel smoke check passed in CI on Linux, macOS and Windows with Python 3.9 and 3.13. The session skills added since then pass 56 tests locally on macOS with Python 3.15 and wait for a fresh CI run. The standalone package is being prepared for release.
 
 ## Install
 
@@ -28,9 +28,9 @@ threadhaven skills
 threadhaven skills --apply
 ```
 
-This installs `snapshot` and `context-check` in `~/.agents/skills/` and `~/.claude/skills/`. Existing different files and symlinks are preserved. It changes no provider settings or hooks. Start a fresh provider session if a newly installed skill is not listed.
+This installs `snapshot`, `context-check`, `initiate`, `checkpoint` and `close` in `~/.agents/skills/` and `~/.claude/skills/`. Existing different files and symlinks are preserved. It changes no provider settings or hooks. Start a fresh provider session if a newly installed skill is not listed.
 
-Claude Code discovers `/snapshot`. Codex can select `$snapshot` or its skills menu. Keep the `threadhaven` command on the PATH available to both tools.
+Claude Code discovers `/snapshot`, `/initiate`, `/checkpoint` and `/close`. Codex can select `$snapshot`, `$initiate`, `$checkpoint` and `$close`, or use its skills menu. Keep the `threadhaven` command on the PATH available to both tools.
 
 ## Save, switch, resume
 
@@ -57,6 +57,16 @@ python examples/demo.py
 
 The example saves as Codex, resumes as Claude, rejects a stale save and detects changed file evidence. It uses temporary storage and removes it when finished.
 
+## Session skills
+
+Three short skills wrap the snapshot commands for a normal working session. They need only `threadhaven` and plain files, so they work in any repository.
+
+- `initiate` reads the latest snapshot and the handover file, runs `check` and reports the goal, decisions, next action and anything stale.
+- `checkpoint` saves the goal, decisions, next action and evidence, runs `check` and says when it is safe to clear.
+- `close` finishes or parks open work, refreshes `HANDOVER.md`, checkpoints, then reads the snapshot back and compares IDs so the next `initiate` starts from the newest state.
+
+The handover file is `HANDOVER.md` in the repository root unless you name another path. See [session skills](docs/sessions.md).
+
 ## Check context
 
 ```sh
@@ -73,7 +83,7 @@ Saved JSON records are immutable under normal operation. Checksums detect accide
 
 The summary is still written by the model or person using the skill. Threadhaven cannot judge whether it retained every important fact. File hashes prove byte equality. Receipt text and URL references need separate verification. Checksums are not signatures.
 
-Snapshots save task state. They do not compact a session, transfer a native conversation, restart a process or reset an account quota. A fuller checkpoint and close workflow can link to snapshot IDs using your existing tools. Token savings and equal model reasoning have not been demonstrated by this release.
+Snapshots save task state. They do not compact a session, transfer a native conversation, restart a process or reset an account quota. The `checkpoint` and `close` skills below add a session workflow that links to snapshot IDs, and you can still link IDs from your own tools. Token savings and equal model reasoning have not been demonstrated by this release.
 
 Use a private local store on one computer. Cloud-sync conflicts, network filesystems, hostile local writers and automatic cross-machine merging are outside this release's guarantees. Review drafts for private information. Credential-pattern checks catch only some common cases.
 
