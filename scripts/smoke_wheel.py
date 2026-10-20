@@ -40,7 +40,7 @@ def main():
                 data = archive.read(name)
                 actual = base64.urlsafe_b64encode(hashlib.sha256(data).digest()).rstrip(b'=').decode()
                 assert digest == 'sha256=' + actual and len(data) == int(length), name
-            assert sum(name.endswith('/SKILL.md') for name in names) == 2
+            assert sum(name.endswith('/SKILL.md') for name in names) == 5
             assert not any('__pycache__' in name or name.endswith('.pyc') for name in names)
         with zipfile.ZipFile(first[1]) as archive:
             source_names = archive.namelist()
@@ -59,7 +59,7 @@ def main():
         print(run([str(python), '-I', str(ROOT / 'examples/demo.py')], outside).strip())
         home = outside / 'home'
         run([str(python), '-I', '-m', 'threadhaven', 'skills', '--home', str(home), '--apply'], outside)
-        assert len(list(home.glob('*/skills/*/SKILL.md'))) == 4
+        assert len(list(home.glob('*/skills/*/SKILL.md'))) == 10
         template = json.loads(run([str(python), '-I', '-m', 'threadhaven', 'snapshot', 'template'], outside))
         assert set(template) == {'goal', 'progress', 'decisions', 'constraints', 'open', 'next_action', 'evidence', 'external_actions'}
         result = json.loads(run([str(python), '-I', '-m', 'threadhaven', 'context', '--provider', 'claude', '--session', 'wheel-smoke', '--health', str(outside / 'health'), '--json'], outside))

@@ -6,11 +6,13 @@ import sys
 from importlib import resources
 from . import __version__, snapshot, context
 
+SKILLS = ('snapshot', 'context-check', 'initiate', 'checkpoint', 'close')
+
 
 def install_skills(home, apply=False):
     home = home.resolve()
     targets = []
-    for name in ('snapshot', 'context-check'):
+    for name in SKILLS:
         body = resources.files('threadhaven').joinpath('skills', name, 'SKILL.md').read_text(encoding='utf-8')
         for base in ('.agents', '.claude'):
             path = home / base / 'skills' / name / 'SKILL.md'

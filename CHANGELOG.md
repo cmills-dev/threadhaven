@@ -1,5 +1,11 @@
 # Release notes
 
+## Unreleased
+
+- Added the `initiate`, `checkpoint` and `close` session skills for Claude Code and Codex. They build on `threadhaven snapshot` and an optional handover file.
+- `threadhaven skills` installs all five skills.
+- Added tests for the skill files, their named commands and a save, read and check round trip.
+
 ## 0.1.0rc1
 
 First standalone release candidate, extracted from the locally used snapshot and context tools.
